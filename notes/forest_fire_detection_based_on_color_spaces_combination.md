@@ -21,17 +21,35 @@ Hay otros algoritmos y dan sus referencias. TODO Agregar esas referencias aquí.
 
 ### Preprocesamiento
 
-Cargan una imágen: $I_{RGB}$ y le aplican un *blur* de $7x7$ que genera $I_b$.
+Cargan una imágen: $I_{RGB}$ y le aplican un *blur* de $7x7$ que genera $I_{b}$.
 
-La imágen se pasa a I_{HSV}, I_{HSL} y I_{HWB}. Los componentes de las imágenes
+La imágen se pasa a $I_{HSV}$, $I_{HSL}$ y $I_{HWB}$. Los componentes de las imágenes
 se separan y se caculan los promedios de $W$ y $B$.
 
 DUDA: COMO QUE SE PROMEDIAN? PROMEDIO TOTAL?
 
 ### Nuevo criterio de segmentación
-\[
-C = (S > 35) \land ((H \geq 330 \land H \leq 65) \land ((L > 70) \lor (B < \text{Bavg} \land W < \text{Wavg}) \lor (W > \text{Wavg} \land S > \text{Savg})) \lor (W \geq 98 \land B \leq 2))
-/]
+Este criterio son 6 reglas.
+
+$$
+C = (S > 35) \land ((H \geq 330 \land H \leq 65) \land ((L > 70) \lor (B < B_{avg} \land W < W_{avg}) \lor (W > \text{Wavg} \land S > \text{Savg})) \lor (W \geq 98 \land B \leq 2))
+$$
+
+- $(S > 35)$: Esta parte asegura que los valores saturados y brillantes se seleccionen.
+- $(H \geq 330 \land H \leq 65)$: Estos colors representan el rojo, naranja y amarillo para los incendios forestales.
+- $(L > 70)$: DUDA. Es para seleccionar los colores de los límites. 
+- $(B < B_{avg} \land W < W_{avg})$: Esta condición sirve para seleccionar los límites del fuego.
+- $(W \geq 98 \land B \leq 2)$: Es para seleccionar los centros de las flamas.
+
+Con esta regla, lo que haces es pasar a $0$ o a $255$ dependiendo si pasa la regla o no. Se evalua pixel a pixel y te produce $I_{\text{hybrid}}$
+
+$$
+I_{\text{hybrid}(x, y)} =
+\begin{cases}
+255 & \text{if } C \text{ is true} \\
+0 & \text{otherwise}
+\end{cases}
+$$
 
 ### Post procesamiento
 

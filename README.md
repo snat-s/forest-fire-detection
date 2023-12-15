@@ -8,11 +8,11 @@ This is an implementation of this paper:
 
 ```
 .
-├── notes
+├─ notes
 └── src
 ```
 
-- Notes: Notes on the implemented paper in markdown format.
-- src: The implementation of the paper.
+- `notes`: Notes on the implemented paper in markdown format.
+- `src`: The implementation of the paper.
 
 
