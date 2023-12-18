@@ -11,7 +11,7 @@ def hsv_2_hwb(hsv_img):
     hwb_img = cv.merge([hue, white, black])
     return hwb_img
 
-def ffd(img):
+def ffd(img, debug=False):
     kernel = KERNEL_SIZE
     blured_img = cv.blur(img.copy(), kernel)
     hsv_img = cv.cvtColor(blured_img.copy(), cv.COLOR_RGB2HSV)
@@ -24,16 +24,18 @@ def ffd(img):
     saturation_avg = np.average(saturation)
     black_avg = np.average(black)
     white_avg = np.average(white)
-    CC = ((hue >= 330) | (hue <= 65))
-    #CC = (saturation > 0.35) & (((light > 0.70) | ((black < black_avg) & (white < white_avg)) | ((white > white_avg) & (saturation > saturation_avg))) | (white >= 98) & (black <= 2))
+    #CC = ((hue >= 330) | (hue <= 65))
+    CC = (saturation > 0.35) & (((light > 0.70) | ((black < black_avg) & (white < white_avg)) | ((white > white_avg) & (saturation > saturation_avg))) | (white >= 98) & (black <= 2))
 
 
     mask = CC.astype(np.uint8) * 255
-    mask_colored = cv.merge([mask, mask, mask])
-    result = cv.bitwise_and(img.astype(np.uint8), mask_colored)
-    #utils.show_img(mask) 
-    #utils.show_img(img) 
-    utils.show_img(result)
+    if debug:
+        mask_colored = cv.merge([mask, mask, mask])
+        result = cv.bitwise_and(img.astype(np.uint8), mask_colored)
+        #utils.show_img(mask) 
+        #utils.show_img(img) 
+        utils.show_img(result)
+    return mask 
 
 if __name__ == "__main__":
     img_path = "../test/RGB_Img_complete_100/379_rgb.png"
