@@ -15,4 +15,12 @@ This is an implementation of this paper:
 - `notes`: Notes on the implemented paper in markdown format.
 - `src`: The implementation of the paper.
 
+## Installation
 
+Generate a conda environment like the following:
+
+```
+conda create -n forest-fire
+```
+
+After that install opencv and numpy.
